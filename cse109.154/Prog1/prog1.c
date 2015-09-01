@@ -13,13 +13,47 @@ int write(int upper, int reverse)
 {
  char c;
  char buf[256];
+ int i = 0;
+
  while((c = getchar()) != EOF)
  {
-  if(upper)
-  {
-   c = toupper(c);
+  if(c == ' ' || c == '\n')
+  {  
+   buf[i] = '\0';
+   int a;
+   if(reverse)
+   {
+    for(a = i - 1; a >= 0; a--)
+    {
+     if(upper)
+      putchar(toupper(buf[a]));
+     else
+      putchar(buf[a]);
+    }
+   }
+   else
+   {
+    for(a = 0; a < i; a++)
+    {
+     if(upper)
+      putchar(toupper(buf[a]));
+     else
+      putchar(buf[a]);
+    }
+   }
+   
+   putchar(' ');
+   
+   if(c == '\n')
+    putchar('\n');  
+ 
+   i = 0;
   }
-  putchar(c);
+  else
+  {
+   buf[i] = c;
+   i++;
+  }
  }
  return 0; 
 }
