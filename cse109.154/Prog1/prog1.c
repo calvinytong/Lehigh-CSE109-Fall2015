@@ -2,7 +2,7 @@
  * CSE 109
  * Calvin Tong
  * cyt219
- * Program Description:
+ * Program Description: reads from standard input and writes back the read characters to standard output with certain filters which are determined by the flags passed in the args
  * Program #1
  * */
 
@@ -76,8 +76,10 @@ int main(int argc, char *argv[])
   {
    reverse = 1;
    continue;
-  }  
-  //perror("Invalid command line option");
+  }
+
+  fprintf(stderr, "Invalid command line option %s\n", argv[i]);
+  return 1;
  }
  write(upper, reverse);
 
