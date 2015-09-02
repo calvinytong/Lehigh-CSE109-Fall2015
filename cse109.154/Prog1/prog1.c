@@ -142,13 +142,13 @@ int main(int argc, char *argv[])
  for(i = 1; i < argc; i++)
  { 
   //set the booleans to true if the arg is equal to -u or -r
-  if(strcmp(argv[i], "-u") == 0)
+  if(!strcmp(argv[i], "-u"))
   {
    upper = 1;
    continue;
   }
   
-  if(strcmp(argv[i], "-r") == 0)
+  if(!strcmp(argv[i], "-r"))
   {
    reverse = 1;
    continue;
