@@ -15,13 +15,15 @@ char buf[256];
 
 /*
  * reverses a null terminated string
- * @param s the null terminated string 
+ * @param s the null terminated string to be flipped 
  * @param i the length of the string
  */
-int reversestr(char s[], int i)
+int reversestr(char *s, int i)
 {
+ //a is the index for the buffer while b is the index for the copy
  int a, b;
  char scopy[i];
+ 
  //copy the string so we have something that stays constant to read from as we edit the buffer
  strcpy(scopy, s);
  
@@ -38,16 +40,31 @@ int reversestr(char s[], int i)
 
 /*
  * capitalizes a string
- * @param s the string to be capitalized
+ * @param s the null terminated string to be capitalized
  * @param i the length of the string
  */
-int capitalizestr(char s[], int i)
+int capitalizestr(char *s, int i)
 {
  int a;
  //iterate through the array changing all fo the characters to uppercase
  for(a = 0; a < i; a++)
  {
   s[a] = toupper(s[a]);
+ }
+}
+
+/*
+ * writes the string out to stdout
+ * @param s the null terminated string
+ * @param i the length of the string
+ */
+int write(char *s, int i)
+{
+ int a;
+ //write the buffer to stdout
+ for(a = 0; a < i; a++)
+ {
+  putchar(buf[a]);
  }
 }
 
@@ -88,26 +105,17 @@ int filter(int upper, int reverse)
    }
    
    //write the buffer to stdout
-   for(a = 0; a < i; a++)
-   { 
-    putchar(buf[a]);
-   }
+   write(buf,i);
    
    //reset and get ready to keep iterating
    
    //put a new line or space depending on c
-   if(c == '\n')
-   {
-    putchar('\n');
-   }
-   else
-   {
-    putchar(' ');
-   }
+   putchar(c);
 
    //set the counter to 0 so we can count the letters in the next word
    i = 0;
   }
+  //if the character is not a space or a newline then we are still iterating through the array
   else
   {
    //set the char to the correct position in the array and increment the counter 
@@ -148,7 +156,7 @@ int main(int argc, char *argv[])
   
   //this will only run i0f the arg is not equal to -u or -r because of the continues
   //but if it is not a valid arg then write an error to stderr and return 1
-  fprintf(stderr, "Invalid command line option %s\n", argv[i]);
+  fprintf(stderr, "Invalid command line option: %s\n", argv[i]);
   return 1;
  }
  
