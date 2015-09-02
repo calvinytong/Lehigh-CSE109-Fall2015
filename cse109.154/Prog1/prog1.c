@@ -93,7 +93,7 @@ int filter(int upper, int reverse)
     putchar(buf[a]);
    }
    
-   //clean up and get ready to keep iterating
+   //reset and get ready to keep iterating
    
    //put a new line or space depending on c
    if(c == '\n')
