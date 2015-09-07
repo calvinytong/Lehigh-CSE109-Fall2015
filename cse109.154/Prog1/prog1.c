@@ -134,7 +134,7 @@ int filter(int upper, int reverse)
  */
 int main(int argc, char *argv[])
 {
- //boolean values 
+ //boolean values representing if either of flags exist
  int upper = 0;
  int reverse = 0;
  
@@ -142,6 +142,7 @@ int main(int argc, char *argv[])
  for(i = 1; i < argc; i++)
  { 
   //set the booleans to true if the arg is equal to -u or -r
+  //strcmp outputs a 0 when the strings are equal so ! is equivilent to == 0
   if(!strcmp(argv[i], "-u"))
   {
    upper = 1;
