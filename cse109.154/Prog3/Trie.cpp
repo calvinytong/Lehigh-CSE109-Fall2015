@@ -13,10 +13,10 @@ Trie::~Trie()
 
 void put(string key, int value)
 {
-
+  
 }
 
 int get(string key)
 {
- return 1;
+ return 0;;
 }
