@@ -17,4 +17,4 @@ Trie.o: Trie.cpp Trie.h
 	g++ $(OPTS) Trie.cpp
 
 clean:
-	rm -f *.o *~
+	rm -f *.o testtrie  *~
