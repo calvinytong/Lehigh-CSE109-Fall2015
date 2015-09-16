@@ -1,7 +1,6 @@
 #ifndef Link_H
 #define Link_H
 
-#include "Node.h"
 using namespace std;
 
 class Node;

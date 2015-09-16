@@ -1,5 +1,7 @@
 #include <cstdlib>
 #include "Node.h"
+
+//using a macro for array size to eliminate magic numbers
 #define ARRAY_SIZE 26
 
 /*

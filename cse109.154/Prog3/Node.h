@@ -1,10 +1,9 @@
 #ifndef NODE_H
 #define NODE_H
+
 #include "Link.h"
 
 using namespace std;
-
-class Link;
 
 class Node
 {
