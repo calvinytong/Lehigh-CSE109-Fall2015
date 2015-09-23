@@ -6,7 +6,7 @@ using namespace std;
 
 class Token;
 
-
+bool endtok = false;
 
 const string specialChars = "+-*/%=(),<>!$";
 
@@ -91,10 +91,12 @@ Token Lexer::nextToken()
   next = nextChar();
   if(isspace(next) && lex == "")
   {
-   next = nextChar();
+   while(isspace(next))
+    next = nextChar();
   }
-  if(isspace(next) || (isSpecialChar(next) && lex != "" && next != ')'))
+  if(isspace(next) || (isSpecialChar(next) && lex != ""))
   {
+    endtok = true;   
     if(lex == "set")
      return Token(Token::SET, lex, tokline, tokpos);
     else if(lex == "print")
@@ -162,7 +164,7 @@ Token Lexer::nextToken()
     case '(':
      return Token(Token::LPAREN, "(", tokline, tokpos);
     case ')':
-     return Token(Token::RPAREN, ")", tokline, tokpos); 
+     return Token(Token::RPAREN, ")", tokline, tokpos);
     case ',':
      return Token(Token::COMMA, ",", tokline, tokpos);
     case '<':
