@@ -87,7 +87,7 @@ Token Lexer::nextToken()
  string lex = "";
  while(true)
  {
-  tokpos = linepos; 
+  int tokpos = linepos; 
   next = nextChar();
   if(isspace(next) && lex == "")
   {
