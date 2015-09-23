@@ -2,15 +2,16 @@
 #define LEXER_H
 
 #include <iostream>
-#include <Token.h>
+
 class Token;
 
 using namespace std;
+
 class Lexer
 {
  public:
   Lexer(istream& i);
-  
+
   ~Lexer();
 
   char nextChar();
@@ -18,7 +19,7 @@ class Lexer
 
   istream& getIn() const;
   char getNext() const;
- 
+
   void setNext(char c);
 
  private:
