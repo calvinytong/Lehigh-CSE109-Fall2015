@@ -86,9 +86,9 @@ Token Lexer::nextToken()
  string lex = "";
  int tokpos = linepos;
  int tokline = linenum;
+ next = nextChar();
  while(true)
  {
-  next = nextChar();
   if(isspace(next) && lex == "")
   {
    while(isspace(next))
@@ -138,7 +138,9 @@ Token Lexer::nextToken()
   }
   else if(isSpecialChar(next))
   {
-   switch(next)
+   char temp = next;
+   next = nextChar();
+   switch(temp)
    {
     case '+':
      return Token(Token::PLUS, "+", tokline, tokpos);
@@ -151,8 +153,8 @@ Token Lexer::nextToken()
     case '%':
      return Token(Token::REM, "%", tokline, tokpos);
     case '=':
-     next = nextChar();
-     if(next == '=')
+     temp = next
+     if(temp == '=')
      {
       next = nextChar();
       return Token(Token::EQ, "==", tokline, tokpos);
@@ -168,7 +170,7 @@ Token Lexer::nextToken()
     case ',':
      return Token(Token::COMMA, ",", tokline, tokpos);
     case '<':
-     next = nextChar();
+     temp = next;
      if(next == '=')
      {
       next = nextChar();
@@ -179,7 +181,7 @@ Token Lexer::nextToken()
       return Token(Token::LT, "<", tokline, tokpos);
      }
     case '>':
-     next = nextChar();
+     temp = next;
      if(next == '=')
      {
       next = nextChar();
@@ -191,7 +193,6 @@ Token Lexer::nextToken()
      }
     case '!':
      next = nextChar();
-     next = nextChar();
      return Token(Token::NE, "!=", tokline, tokpos);
     case '$':
      return Token(Token::ENDOFFILE, "$", tokline, tokpos);
@@ -202,6 +203,7 @@ Token Lexer::nextToken()
   else
   {
    lex += next;
+   next = nextChar();
   }
  }
 }
