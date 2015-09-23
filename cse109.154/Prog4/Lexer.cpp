@@ -96,42 +96,42 @@ Token Lexer::nextToken()
   if(isspace(next) || (isSpecialChar(next) && lex != "" && next != ')'))
   {
     if(lex == "set")
-     return Token(Token::SET, lex, linenum, tokpos);
+     return Token(Token::SET, lex, tokline, tokpos);
     else if(lex == "print")
-     return Token(Token::PRINT, lex, linenum, tokpos);
+     return Token(Token::PRINT, lex, tokline, tokpos);
     else if(lex == "while")
-     return Token(Token::WHILE, lex, linenum, tokpos);
+     return Token(Token::WHILE, lex, tokline, tokpos);
     else if(lex == "do")
-     return Token(Token::DO, lex, linenum, tokpos);
+     return Token(Token::DO, lex, tokline, tokpos);
     else if(lex == "end")
-     return Token(Token::END, lex, linenum, tokpos);
+     return Token(Token::END, lex, tokline, tokpos);
     else if(lex ==  "and")
-     return Token(Token::AND, lex, linenum, tokpos);
+     return Token(Token::AND, lex, tokline, tokpos);
     else if(lex ==  "or")
-     return Token(Token::OR, lex, linenum, tokpos);
+     return Token(Token::OR, lex, tokline, tokpos);
     else if(lex == "if")
-     return Token(Token::IF, lex, linenum, tokpos);
+     return Token(Token::IF, lex, tokline, tokpos);
     else if (lex == "then")
-     return Token(Token::THEN, lex, linenum, tokpos);
+     return Token(Token::THEN, lex, tokline, tokpos);
     else if (lex == "else")
-     return Token(Token::ELSE, lex, linenum, tokpos);
+     return Token(Token::ELSE, lex, tokline, tokpos);
     else if(lex == "endif")
-     return Token(Token::ENDIF, lex, linenum, tokpos);
+     return Token(Token::ENDIF, lex, tokline, tokpos);
     else if(lex ==  "program")
-     return Token(Token::PROGRAM, lex, linenum, tokpos);
+     return Token(Token::PROGRAM, lex, tokline, tokpos);
     else
     {
-     return Token(Token::INTLIT, lex, linenum, tokpos);
+     return Token(Token::INTLIT, lex, tokline, tokpos);
     // if(regexsearch(lex, intlit))
-     // return Token(Token::INTLIT, lex, linenum, tokpos);
+     // return Token(Token::INTLIT, lex, tokline, tokpos);
     // else if(regex_match(lex, floatlit))
-     // return Token(Token::FLOATLIT, lex, linenum, tokpos);
+     // return Token(Token::FLOATLIT, lex, tokline, tokpos);
     // else if(regex_match(lex, strlit))
-     // return Token(Token::STRLIT, lex, linenum, tokpos);
+     // return Token(Token::STRLIT, lex, tokline, tokpos);
     // else if(regex_match(lex, ident))
-     // return Token(Token::IDENT, lex, linenum, tokpos);
+     // return Token(Token::IDENT, lex, tokline, tokpos);
     // else
-     // return Token(Token::ERROR, lex, linenum, tokpos);
+     // return Token(Token::ERROR, lex, tokline, tokpos);
     }
   }
   else if(isSpecialChar(next))
@@ -139,62 +139,62 @@ Token Lexer::nextToken()
    switch(next)
    {
     case '+':
-     return Token(Token::PLUS, "+", linenum, tokpos);
+     return Token(Token::PLUS, "+", tokline, tokpos);
     case '-':
-     return Token(Token::MINUS, "-", linenum, tokpos);
+     return Token(Token::MINUS, "-", tokline, tokpos);
     case '*':
-     return Token(Token::TIMES, "*", linenum, tokpos);
+     return Token(Token::TIMES, "*", tokline, tokpos);
     case '/':
-     return Token(Token::DIVIDE, "/", linenum, tokpos);
+     return Token(Token::DIVIDE, "/", tokline, tokpos);
     case '%':
-     return Token(Token::REM, "%", linenum, tokpos);
+     return Token(Token::REM, "%", tokline, tokpos);
     case '=':
      next = nextChar();
      if(next == '=')
      {
       next = nextChar();
-      return Token(Token::EQ, "==", linenum, tokpos);
+      return Token(Token::EQ, "==", tokline, tokpos);
      }
      else
      {
-      return Token(Token::ASSIGN, "=", linenum, tokpos);
+      return Token(Token::ASSIGN, "=", tokline, tokpos);
      }
     case '(':
-     return Token(Token::LPAREN, "(", linenum, tokpos);
+     return Token(Token::LPAREN, "(", tokline, tokpos);
     case ')':
-     return Token(Token::RPAREN, ")", linenum, tokpos); 
+     return Token(Token::RPAREN, ")", tokline, tokpos); 
     case ',':
-     return Token(Token::COMMA, ",", linenum, tokpos);
+     return Token(Token::COMMA, ",", tokline, tokpos);
     case '<':
      next = nextChar();
      if(next == '=')
      {
       next = nextChar();
-      return Token(Token::LE, "<=", linenum, tokpos);
+      return Token(Token::LE, "<=", tokline, tokpos);
      }
      else
      {
-      return Token(Token::LT, "<", linenum, tokpos);
+      return Token(Token::LT, "<", tokline, tokpos);
      }
     case '>':
      next = nextChar();
      if(next == '=')
      {
       next = nextChar();
-      return Token(Token::GE, ">=", linenum, tokpos);
+      return Token(Token::GE, ">=", tokline, tokpos);
      }
      else
      {
-      return Token(Token::LE, ">", linenum, tokpos);
+      return Token(Token::LE, ">", tokline, tokpos);
      }
     case '!':
      next = nextChar();
      next = nextChar();
-     return Token(Token::NE, "!=", linenum, tokpos);
+     return Token(Token::NE, "!=", tokline, tokpos);
     case '$':
-     return Token(Token::ENDOFFILE, "$", linenum, tokpos);
+     return Token(Token::ENDOFFILE, "$", tokline, tokpos);
     default:
-     return Token(Token::ERROR, "error", linenum, tokpos);
+     return Token(Token::ERROR, "error", tokline, tokpos);
    }
   }
   else
