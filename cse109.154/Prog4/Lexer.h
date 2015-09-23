@@ -15,7 +15,7 @@ class Lexer
   ~Lexer();
 
   char nextChar();
-  Tok::Token nextToken();
+  Token nextToken();
 
   istream& getIn() const;
   char getNext() const;

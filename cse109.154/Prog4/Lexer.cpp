@@ -84,7 +84,7 @@ char Lexer::nextChar()
  }
 }
 
-Tok::Token Lexer::nextToken()
+Token Lexer::nextToken()
 {
  string lex = "";
  while(true)
@@ -98,9 +98,9 @@ Tok::Token Lexer::nextToken()
     else if(lex == "print")
      return Token(Token::PRINT, lex, linenum, linepos);
     else if(lex == "while")
-     return Token(Token::WHILE, lex, linenum, linepose);
+     return Token(Token::WHILE, lex, linenum, linepos);
     else if(lex == "do")
-     return Token(Token::DO, lex, linenum, linepose);
+     return Token(Token::DO, lex, linenum, linepos);
     else if(lex == "end")
      return Token(Token::END, lex, linenum, linepose);
     else if(lex ==  "and")
