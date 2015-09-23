@@ -19,12 +19,16 @@ class Lexer
 
   istream& getIn() const;
   char getNext() const;
+  int getLine() const;
+  int getPos() const;
 
   void setNext(char c);
 
  private:
   istream& in;
   char next;
+  int linenum;
+  int linepos;
   bool isSpecialChar(char ch);
   char get(istream& i);
 };

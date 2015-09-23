@@ -6,8 +6,7 @@ using namespace std;
 
 class Token;
 
-int linenum;
-int linepos;
+
 
 const string specialChars = "+-*/%=(),<>!$";
 
@@ -36,6 +35,15 @@ char Lexer::getNext() const
  return this->next;
 }
 
+int getLine() const;
+{
+ return this->linenum
+}
+
+int getPos() const;
+{
+  return this->linepos
+}
 void Lexer::setNext(char c)
 {
  this->next = c;
