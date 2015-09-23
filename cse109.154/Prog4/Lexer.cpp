@@ -102,21 +102,21 @@ Token Lexer::nextToken()
     else if(lex == "do")
      return Token(Token::DO, lex, linenum, linepos);
     else if(lex == "end")
-     return Token(Token::END, lex, linenum, linepose);
+     return Token(Token::END, lex, linenum, linepos);
     else if(lex ==  "and")
-     return Token(Token::AND, lex, linenum, linepose);
+     return Token(Token::AND, lex, linenum, linepos);
     else if(lex ==  "or")
-     return Token(Token::OR, lex, linenum, linepose);
+     return Token(Token::OR, lex, linenum, linepos);
     else if(lex == "if")
-     return Token(Token::IF, lex, linenum, linepose);
+     return Token(Token::IF, lex, linenum, linepos);
     else if (lex == "then")
-     return Token(Token::THEN, lex, linenum, linepose);
+     return Token(Token::THEN, lex, linenum, linepos);
     else if (lex == "else")
-     return Token(Token::ELSE, lex, linenum, linepose);
+     return Token(Token::ELSE, lex, linenum, linepos);
     else if(lex == "endif")
-     return Token(Token::ENDIF, lex, linenum, linepose);
+     return Token(Token::ENDIF, lex, linenum, linepos);
     else if(lex ==  "program")
-     return Token(Token::PROGRAM, lex, linenum, linepose);
+     return Token(Token::PROGRAM, lex, linenum, linepos);
     else
     {
      if(regex_match(lex, intlit))
@@ -189,9 +189,9 @@ Token Lexer::nextToken()
      next = nextChar();
      return Token(Token::NE, "!", linenum, linepos);
     case '$':
-     return Token(Token::ENDOFFILE, EOF, linenum, linepos);
+     return Token(Token::ENDOFFILE, "$", linenum, linepos);
     default:
-     return Token(Token::ERROR, next, linenum, linepos);
+     return Token(Token::ERROR, "error", linenum, linepos);
    }
   }
   else
