@@ -1,6 +1,5 @@
 OBJ = prog4.o Lexer.o Token.o
-OPTS= -g -c -Wall -Werror -std=c++0x
-
+OPTS= -g -c -Wall -Werror -std=gnu++0x -std=c++0x 
 lextest: $(OBJ)
 	g++ -o lextest $(OBJ)
 

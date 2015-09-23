@@ -1,6 +1,6 @@
 #include <cstdlib>
 #include "Token.h"
-
+#include <iostream>
 
 int const Token::INTLIT = 1;
 int const Token:: FLOATLIT = 2;
@@ -88,4 +88,10 @@ void Token::setLinenum(int i)
 void Token::setCharpos(int i)
 {
   charpos = i;
+}
+
+ostream& operator<<(ostream& out, Token& t)
+{
+ out << t.getType() << '\t' << t.getLexeme() << '\t' << t.getLine() << '\t' << t.getPos() << endl;
+ return out;
 }

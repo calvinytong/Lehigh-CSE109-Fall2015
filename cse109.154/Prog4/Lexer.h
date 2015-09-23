@@ -26,6 +26,7 @@ class Lexer
   istream& in;
   char next;
   bool isSpecialChar(char ch);
+  char get(istream& i);
 };
 
 #endif

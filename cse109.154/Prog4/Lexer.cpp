@@ -1,9 +1,7 @@
 #include <cstdlib>
 #include <iostream>
-#include <regex>
 #include "Lexer.h"
 #include "Token.h"
-
 using namespace std;
 
 class Token;
@@ -13,10 +11,10 @@ int linepos;
 
 const string specialChars = "+-*/%=(),<>!$";
 
-regex intlit("[1-9][0-9]*|0|0x[0-9a-f]+");
-regex floatlit("([1-9][0-9]*|0)\\.[0-9]+");
-regex strlit("\".*\"");
-regex ident("[a-zA-Z][a-zA-Z0-9_]*");
+//regex intlit("[1-9][0-9]*|0|0x[0-9a-f]+");
+//regex floatlit("([1-9][0-9]*|0)\\.[0-9]+");
+//regex strlit("\".*\"");
+//regex ident("[a-zA-Z][a-zA-Z0-9_]*");
 
 Lexer::Lexer(istream& i):in(i), next('\0')
 {
@@ -46,7 +44,7 @@ void Lexer::setNext(char c)
 char Lexer::nextChar()
 {
  char c;
- this->getIn() >> c;
+ c = get(this->getIn());
  if(c == EOF)
  {
   return '$';
@@ -89,12 +87,16 @@ Token Lexer::nextToken()
  string lex = "";
  while(true)
  {
+  tokpos = linepos; 
   next = nextChar();
-
-  if(isspace(next) || isSpecialChar(next))
+  if(isspace(next) && lex == "")
+  {
+   next = nextChar();
+  }
+  if(isspace(next) || (isSpecialChar(next) && lex != "" && next != ')'))
   {
     if(lex == "set")
-     return Token(Token::SET, lex, linenum, linepos);
+     return Token(Token::SET, lex, linenum, tokpos);
     else if(lex == "print")
      return Token(Token::PRINT, lex, linenum, linepos);
     else if(lex == "while")
@@ -119,16 +121,17 @@ Token Lexer::nextToken()
      return Token(Token::PROGRAM, lex, linenum, linepos);
     else
     {
-     if(regex_match(lex, intlit))
-      return Token(Token::INTLIT, lex, linenum, linepos);
-     else if(regex_match(lex, floatlit))
-      return Token(Token::FLOATLIT, lex, linenum, linepos);
-     else if(regex_match(lex, strlit))
-      return Token(Token::STRLIT, lex, linenum, linepos);
-     else if(regex_match(lex, ident))
-      return Token(Token::IDENT, lex, linenum, linepos);
-     else
-      return Token(Token::ERROR, lex, linenum, linepos);
+     return Token(Token::INTLIT, lex, linenum, linepos);
+    // if(regexsearch(lex, intlit))
+     // return Token(Token::INTLIT, lex, linenum, linepos);
+    // else if(regex_match(lex, floatlit))
+     // return Token(Token::FLOATLIT, lex, linenum, linepos);
+    // else if(regex_match(lex, strlit))
+     // return Token(Token::STRLIT, lex, linenum, linepos);
+    // else if(regex_match(lex, ident))
+     // return Token(Token::IDENT, lex, linenum, linepos);
+    // else
+     // return Token(Token::ERROR, lex, linenum, linepos);
     }
   }
   else if(isSpecialChar(next))
@@ -159,7 +162,7 @@ Token Lexer::nextToken()
     case '(':
      return Token(Token::LPAREN, "(", linenum, linepos);
     case ')':
-     return Token(Token::RPAREN, ")", linenum, linepos);
+     return Token(Token::RPAREN, ")", linenum, linepos); 
     case ',':
      return Token(Token::COMMA, ",", linenum, linepos);
     case '<':
@@ -187,7 +190,7 @@ Token Lexer::nextToken()
     case '!':
      next = nextChar();
      next = nextChar();
-     return Token(Token::NE, "!", linenum, linepos);
+     return Token(Token::NE, "!=", linenum, linepos);
     case '$':
      return Token(Token::ENDOFFILE, "$", linenum, linepos);
     default:
@@ -204,4 +207,9 @@ Token Lexer::nextToken()
 bool Lexer::isSpecialChar(char ch)
 {
  return specialChars.find(ch) != string::npos;
+}
+
+char Lexer::get(istream& i)
+{
+ return i.get();
 }

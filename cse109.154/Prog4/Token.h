@@ -58,6 +58,8 @@ class Token
   Token(int t, string lex, int l, int p);
   Token();
 
+  friend ostream& operator<<(ostream& in, Token& t);
+
   private:
    int tokentype;
    string lexeme;
