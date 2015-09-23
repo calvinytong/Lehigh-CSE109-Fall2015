@@ -15,7 +15,7 @@ const string specialChars = "+-*/%=(),<>!$";
 //regex strlit("\".*\"");
 //regex ident("[a-zA-Z][a-zA-Z0-9_]*");
 
-Lexer::Lexer(istream& i):in(i), next('\0')
+Lexer::Lexer(istream& i):in(i), next('\0'), linenum(1), linepos(1)
 {
 
 }
@@ -35,15 +35,6 @@ char Lexer::getNext() const
  return this->next;
 }
 
-int getLine() const;
-{
- return this->linenum
-}
-
-int getPos() const;
-{
-  return this->linepos
-}
 void Lexer::setNext(char c)
 {
  this->next = c;
@@ -66,7 +57,7 @@ char Lexer::nextChar()
   if(c == '\n')
   {
    this->getIn() >> c;
-   linepos = 0;
+   linepos = 1;
    linenum++;
    return c;
   }
@@ -79,7 +70,7 @@ char Lexer::nextChar()
  {
   if(c == '\n')
   {
-   linepos = 0;
+   linepos = 1;
    linenum++;
   }
   else
@@ -93,9 +84,10 @@ char Lexer::nextChar()
 Token Lexer::nextToken()
 {
  string lex = "";
+ int tokpos = linepos;
+ int tokline = linenum;
  while(true)
  {
-  int tokpos = linepos; 
   next = nextChar();
   if(isspace(next) && lex == "")
   {

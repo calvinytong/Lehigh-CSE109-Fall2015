@@ -19,8 +19,6 @@ class Lexer
 
   istream& getIn() const;
   char getNext() const;
-  int getLine() const;
-  int getPos() const;
 
   void setNext(char c);
 
