@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <stdio.h>
+#include <fstream>
 #include "Lexer.h"
 #include "Token.h"
 
@@ -8,8 +9,23 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
- //lexer object
- Lexer *l = new Lexer(cin);
+ Lexer *l;
+ if(argc == 2)
+ {
+  
+  ifstream in;
+  in.open(argv[1]);
+
+  if(in)
+   l = new Lexer(in);
+  else
+   return 1;
+ }
+ else
+ {
+  l = new Lexer(cin);
+ }
+ 
 
  //write header
  cout << "Type" << '\t' << "Lexeme" << '\t' << "Line #" << '\t' << "Pos" << endl;

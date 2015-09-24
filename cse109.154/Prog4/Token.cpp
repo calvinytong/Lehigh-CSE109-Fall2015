@@ -8,6 +8,7 @@ int const Token::INTLIT = 1;
 int const Token:: FLOATLIT = 2;
 int const Token::STRLIT = 3;
 int const Token::IDENT = 4;
+int const Token::PLUS = 5;
 int const Token::MINUS = 6;
 int const Token::TIMES = 7;
 int const Token::DIVIDE = 8;
