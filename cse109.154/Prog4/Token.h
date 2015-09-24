@@ -5,9 +5,11 @@
 
 using namespace std;
 
+//header for the token class
 class Token
 {
  public:
+  //header file declarations for the token types
   static const int INTLIT;
   static const int FLOATLIT;
   static const int STRLIT;
@@ -44,26 +46,35 @@ class Token
 
   static const int ENDOFFILE;
   static const int ERROR;
+  
+  //constructors
+  Token(int t, string lex, int l, int p);
+  Token();
 
+  //destructors
+  ~Token();
+
+  //getters
   int getType() const;
   string getLexeme() const;
   int getLine() const;
   int getPos() const;
 
+  //setters
   void setType(int i);
   void setLexeme(string s);
   void setLinenum(int i);
   void setCharpos(int i);
 
-  Token(int t, string lex, int l, int p);
-  Token();
-
+  //friend operator overload
   friend ostream& operator<<(ostream& in, Token& t);
 
   private:
+    //private member variables
    int tokentype;
    string lexeme;
    int linenum;
    int charpos;
 };
+
 #endif

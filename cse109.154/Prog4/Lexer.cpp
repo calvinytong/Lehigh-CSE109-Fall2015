@@ -47,7 +47,8 @@ char Lexer::getNext() const
 }
 
 /*
- * setter for the  
+ * setter for the next variable
+ * @param c the value next will become  
  */
 void Lexer::setNext(char c)
 {
@@ -55,7 +56,8 @@ void Lexer::setNext(char c)
 }
 
 /*
- * 
+ * gets the next char from the input stream
+ * @return c the next char in input stream
  */
 char Lexer::nextChar()
 {
@@ -89,28 +91,40 @@ char Lexer::nextChar()
 }
 
 /*
- * 
+ * gets the next token from std in and returns is as a token object
+ * @return the token object
  */
 Token Lexer::nextToken()
 {
+ //string to hold the current token
  string lex = "";
+
+ //save linepos and line num at start
  int tokpos = linepos;
  int tokline = linenum;
+ 
+ //if gets the ball rolling on the first call of nextToken 
  if(next == '\0')
   next = nextChar();
+ 
  while(true)
  {
+  //if there is a space next and the token is empty continue iteration until you reach the next char
   if(isspace(next) && lex == "")
   {
    while(isspace(next))
    { 
     next = nextChar();
+    //update tokpos and tokline
     tokpos = linepos;
     tokline = linenum;
    }
   }
+
+  //if there is a space or special character next and lex is not empty we have a token
   if(isspace(next) || (isSpecialChar(next) && lex != ""))
-  {
+  {  
+    //giant ugly if statment could have been done using arrays for good practice but I wanted to practice my vim skills
     if(lex == "set")
      return Token(Token::SET, lex, tokline, tokpos);
     else if(lex == "print")
@@ -135,6 +149,7 @@ Token Lexer::nextToken()
      return Token(Token::ENDIF, lex, tokline, tokpos);
     else if(lex ==  "program")
      return Token(Token::PROGRAM, lex, tokline, tokpos);
+    //if its not a keyword then it must be one of the other types
     else
     {
      if(isIntlit(lex))
@@ -149,10 +164,13 @@ Token Lexer::nextToken()
       return Token(Token::ERROR, lex, tokline, tokpos);
     }
   }
+  //if its a special character and lex is empty then parse the characters
   else if(isSpecialChar(next))
   {
+   //make sure the program is one step ahead of the parser
    char temp = next;
    next = nextChar();
+   //giant switch again bad practice but vim skills are important
    switch(temp)
    {
     case '+':
@@ -166,6 +184,7 @@ Token Lexer::nextToken()
     case '%':
      return Token(Token::REM, "%", tokline, tokpos);
     case '=':
+     //check for ==
      temp = next;
      if(temp == '=')
      {
@@ -183,6 +202,7 @@ Token Lexer::nextToken()
     case ',':
      return Token(Token::COMMA, ",", tokline, tokpos);
     case '<':
+     //check for <=
      temp = next;
      if(next == '=')
      {
@@ -195,6 +215,7 @@ Token Lexer::nextToken()
      }
     case '>':
      temp = next;
+     //check for >=
      if(next == '=')
      {
       next = nextChar();
@@ -213,6 +234,7 @@ Token Lexer::nextToken()
      return Token(Token::ERROR, "error", tokline, tokpos);
    }
   }
+  //else we just have a char and append it to lex then go to the next char
   else
   {
    lex += next;
@@ -222,7 +244,9 @@ Token Lexer::nextToken()
 }
 
 /*
- * 
+ * uses the special chars string to figure out if a char is special
+ * @param ch the character that is being tested 
+ * @return true if it is false if it is not
  */
 bool Lexer::isSpecialChar(char ch)
 {
@@ -230,12 +254,14 @@ bool Lexer::isSpecialChar(char ch)
 }
 
 /*
- * 
+ * determines if a string is type intlit
+ * @param s the string that is being tested
  */
 bool Lexer::isIntlit(string s)
 {
  for(uint i = 0; i < s.size(); i++)
  {
+  //if anything is not a digit then it fails
   if(!isdigit(s[i]))
   {
    return false;
@@ -245,10 +271,13 @@ bool Lexer::isIntlit(string s)
 }
 
 /*
- * 
+ * determines if a string is type float
+ * @param s the string that is being tested
+ * @return true if true false if false 
  */
 bool Lexer::isFloatlit(string s)
 {
+ //if the first char is not a number fail
  if(!isdigit(s[0]))
  {
   return false;
@@ -256,19 +285,23 @@ bool Lexer::isFloatlit(string s)
  int count = 0;
  for(uint i = 0; i < s.size(); i++)
  {
+  //count the periods
   if(s[i] == '.')
   {
    count++;
   }
+  //if anything is not a digit except the period then fail
   else if(!isdigit(s[i]))
   {
    return false;
   }
  }
- if(count == 0 || count > 1)
+ //if the count is not 1 then fail
+ if(count != 1)
  {
   return false;
  }
+ //otherwise return true
  else
  {
   return true;
@@ -276,10 +309,13 @@ bool Lexer::isFloatlit(string s)
 }
 
 /*
- * 
+ * checks if an inputed string is a string literal
+ * @param s the string that is being tested
+ * @return true if true false if false 
  */
 bool Lexer::isStrlit(string s)
 {
+  //only condition is that it has to have quotes on both sides
  if(s[0] == '\"' && s[s.length()-1] == '\"')
  {
   return true;
@@ -291,18 +327,23 @@ bool Lexer::isStrlit(string s)
 }
 
 /*
- * 
+ * checks if string is of type ident
+ * @param s the string that is being tested
+ * @return true if true false if false 
  */
 bool Lexer::isIdent(string s)
 {
  for(uint i = 0; i < s.size(); i++)
  {
+  //if its not a number then check if its one of the two allowed chars
   if(!isalnum(s[i]))
   {
+   //if allowed continue
    if(s[i] == '_' || s[i] == '*')
    {
     continue;
    }
+   //else not a string
    else
    {
     return false;
@@ -313,7 +354,9 @@ bool Lexer::isIdent(string s)
 }
 
 /*
- * 
+ * gets the next char from the istream using get method
+ * @param i the address of the istream
+ * @return the next char
  */
 char Lexer::get(istream& i)
 {
