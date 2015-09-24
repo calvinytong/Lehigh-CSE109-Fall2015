@@ -2,44 +2,61 @@
 #include <iostream>
 #include "Lexer.h"
 #include "Token.h"
+#include <string>
+#include <stdio.h>
 using namespace std;
 
 class Token;
 
-bool endtok = false;
-
+//string containing special chars
 const string specialChars = "+-*/%=(),<>!$";
 
-//regex intlit("[1-9][0-9]*|0|0x[0-9a-f]+");
-//regex floatlit("([1-9][0-9]*|0)\\.[0-9]+");
-//regex strlit("\".*\"");
-//regex ident("[a-zA-Z][a-zA-Z0-9_]*");
-
+/*
+ * constructor for lexer class sets next to null, linenum to 1, linepos to 1
+ * @param istream the address of the istream
+ */
 Lexer::Lexer(istream& i):in(i), next('\0'), linenum(1), linepos(1)
 {
 
 }
 
+/*
+ * destructor no dynamically allocated memory so no code needed 
+ */
 Lexer::~Lexer()
 {
 
 }
 
+/*
+ * getter for the istream
+ * @return the istream object
+ */
 istream& Lexer::getIn() const
 {
  return this->in;
 }
 
+/*
+ *getter for the next string
+ * @return the next char
+ */
 char Lexer::getNext() const
 {
  return this->next;
 }
 
+/*
+ * setter for the  
+ */
 void Lexer::setNext(char c)
 {
  this->next = c;
 }
 
+/*
+ * 
+ */
 char Lexer::nextChar()
 {
  char c;
@@ -50,27 +67,17 @@ char Lexer::nextChar()
  }
  else if(c == '#')
  {
-  while(c != '\n' && c != EOF)
-  {
-   this->getIn() >> c;
-  }
-  if(c == '\n')
-  {
-   this->getIn() >> c;
-   linepos = 1;
+   while(c != '\n' && c != EOF)
+    c = get(this->getIn());
+   linepos = 0;
    linenum++;
    return c;
-  }
-  else
-  {
-   return '$';
-  }
  }
  else
  {
   if(c == '\n')
   {
-   linepos = 1;
+   linepos = 0;
    linenum++;
   }
   else
@@ -81,22 +88,29 @@ char Lexer::nextChar()
  }
 }
 
+/*
+ * 
+ */
 Token Lexer::nextToken()
 {
  string lex = "";
  int tokpos = linepos;
  int tokline = linenum;
- next = nextChar();
+ if(next == '\0')
+  next = nextChar();
  while(true)
  {
   if(isspace(next) && lex == "")
   {
    while(isspace(next))
+   { 
     next = nextChar();
+    tokpos = linepos;
+    tokline = linenum;
+   }
   }
   if(isspace(next) || (isSpecialChar(next) && lex != ""))
   {
-    endtok = true;   
     if(lex == "set")
      return Token(Token::SET, lex, tokline, tokpos);
     else if(lex == "print")
@@ -123,17 +137,16 @@ Token Lexer::nextToken()
      return Token(Token::PROGRAM, lex, tokline, tokpos);
     else
     {
-     return Token(Token::INTLIT, lex, tokline, tokpos);
-    // if(regexsearch(lex, intlit))
-     // return Token(Token::INTLIT, lex, tokline, tokpos);
-    // else if(regex_match(lex, floatlit))
-     // return Token(Token::FLOATLIT, lex, tokline, tokpos);
-    // else if(regex_match(lex, strlit))
-     // return Token(Token::STRLIT, lex, tokline, tokpos);
-    // else if(regex_match(lex, ident))
-     // return Token(Token::IDENT, lex, tokline, tokpos);
-    // else
-     // return Token(Token::ERROR, lex, tokline, tokpos);
+     if(isIntlit(lex))
+      return Token(Token::INTLIT, lex, tokline, tokpos);
+     else if(isFloatlit(lex))
+      return Token(Token::FLOATLIT, lex, tokline, tokpos);
+     else if(isStrlit(lex))
+      return Token(Token::STRLIT, lex, tokline, tokpos);
+     else if(isIdent(lex))
+      return Token(Token::IDENT, lex, tokline, tokpos);
+     else
+      return Token(Token::ERROR, lex, tokline, tokpos);
     }
   }
   else if(isSpecialChar(next))
@@ -153,7 +166,7 @@ Token Lexer::nextToken()
     case '%':
      return Token(Token::REM, "%", tokline, tokpos);
     case '=':
-     temp = next
+     temp = next;
      if(temp == '=')
      {
       next = nextChar();
@@ -208,11 +221,100 @@ Token Lexer::nextToken()
  }
 }
 
+/*
+ * 
+ */
 bool Lexer::isSpecialChar(char ch)
 {
  return specialChars.find(ch) != string::npos;
 }
 
+/*
+ * 
+ */
+bool Lexer::isIntlit(string s)
+{
+ for(uint i = 0; i < s.size(); i++)
+ {
+  if(!isdigit(s[i]))
+  {
+   return false;
+  }
+ }
+ return true;
+}
+
+/*
+ * 
+ */
+bool Lexer::isFloatlit(string s)
+{
+ if(!isdigit(s[0]))
+ {
+  return false;
+ }
+ int count = 0;
+ for(uint i = 0; i < s.size(); i++)
+ {
+  if(s[i] == '.')
+  {
+   count++;
+  }
+  else if(!isdigit(s[i]))
+  {
+   return false;
+  }
+ }
+ if(count == 0 || count > 1)
+ {
+  return false;
+ }
+ else
+ {
+  return true;
+ }
+}
+
+/*
+ * 
+ */
+bool Lexer::isStrlit(string s)
+{
+ if(s[0] == '\"' && s[s.length()-1] == '\"')
+ {
+  return true;
+ }
+ else
+ {
+  return false;
+ }
+}
+
+/*
+ * 
+ */
+bool Lexer::isIdent(string s)
+{
+ for(uint i = 0; i < s.size(); i++)
+ {
+  if(!isalnum(s[i]))
+  {
+   if(s[i] == '_' || s[i] == '*')
+   {
+    continue;
+   }
+   else
+   {
+    return false;
+   }
+  }
+ }
+ return true;
+}
+
+/*
+ * 
+ */
 char Lexer::get(istream& i)
 {
  return i.get();

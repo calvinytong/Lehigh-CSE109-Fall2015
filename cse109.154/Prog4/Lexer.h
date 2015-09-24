@@ -2,6 +2,7 @@
 #define LEXER_H
 
 #include <iostream>
+#include <string>
 
 class Token;
 
@@ -28,6 +29,10 @@ class Lexer
   int linenum;
   int linepos;
   bool isSpecialChar(char ch);
+  bool isIntlit(string s);
+  bool isFloatlit(string s);
+  bool isStrlit(string s);
+  bool isIdent(string s);
   char get(istream& i);
 };
 
