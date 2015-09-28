@@ -1,0 +1,109 @@
+#CSE 109
+#Calvin Tong
+#cyt219
+#Program Description: assembly code to calculate digits of pi
+#Homework 2
+
+#store the number of digits to calculate
+LOADL 10
+STOREV num
+
+#store the count of digits calculated
+LOADL 0
+STOREV count
+
+#store constant 3
+LOADL 3.0
+STOREV c
+
+#store constant 4
+LOADL 4.0
+STOREV m
+
+#store positive or negative factor 
+LOADL -1.0
+STOREV n
+
+#store the starting number
+LOADL 2.0
+STOREV current
+
+#load the 3 onto the bottom of the stack
+LOADV c
+
+loadstack:
+
+#load the positive or negative factor making sure it alternates
+LOADV n
+LOADL -1
+MULT
+STOREV n
+LOADV n
+
+#load nthe constant 4
+LOADV m
+
+#load the 1 on top of the division symbol
+LOADL 1
+
+#calculate what the final value should be and store it in final
+LOADV current
+LOADL 2
+ADD
+STOREV final
+
+#load the current number
+LOADV current
+
+#loop to add the bottom of the fraction onto the stack
+loadnum:
+
+#load current number + 1 and set current number equal to the new number
+DUP
+LOADL 1
+ADD
+STOREV current
+LOADV current
+
+#check if we have loaded enough numbers by comparing the final and the current
+DUP
+LOADV final
+ISEQ
+
+#if we have not loaded enough then jump back to load num
+JUMPF loadnum
+
+#do the maths leaving our current value of pi at the bottom of the stack
+
+#multiply the bottom of the fraction
+MULT
+MULT
+
+#divide by 1
+DIV
+
+#multiply by 4 and -1 or 1
+MULT
+MULT
+
+#add to the current value of pi sitting at the bottom of the stack
+ADD
+
+#increment count
+LOADV count
+LOADL 1
+ADD
+STOREV count
+
+#Check if we have done enough terms note this assumes that the orginal 3 is term 0
+LOADV count
+LOADV num
+ISEQ
+
+#if we do not have enough terms yet then jump back up to the top and do it again
+JUMPF loadstack
+
+#print results
+PRINTS "The Calculated Value of pi with 10 terms is "
+PRINT
+PRINTLN
