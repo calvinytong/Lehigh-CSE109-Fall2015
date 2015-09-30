@@ -1,3 +1,12 @@
+/*
+ * CSE 109
+ * Calvin Tong
+ * cyt219
+ * Program Description: a simple lexer
+ * Program #4
+ */
+
+
 #include <cstdlib>
 #include <iostream>
 #include <stdio.h>
@@ -12,7 +21,7 @@ int main(int argc, char** argv)
  Lexer *l;
  if(argc == 2)
  {
-  
+
   ifstream in;
   in.open(argv[1]);
 
@@ -25,7 +34,7 @@ int main(int argc, char** argv)
  {
   l = new Lexer(cin);
  }
- 
+
 
  //write header
  cout << "Type" << '\t' << "Lexeme" << '\t' << "Line #" << '\t' << "Pos" << endl;
@@ -40,5 +49,5 @@ int main(int argc, char** argv)
   cout << t;
   t = l->nextToken();
  }
- return 0; 
+ return 0;
 }
