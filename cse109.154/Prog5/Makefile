@@ -1,16 +1,19 @@
-OBJ = prog4.o Lexer.o Token.o
+OBJ = sil.o Lexer.o Token.o Parser.o
 OPTS= -g -c -Wall -Werror 
-lextest: $(OBJ)
-	g++ -o lextest $(OBJ)
+silc: $(OBJ)
+	g++ -o silc $(OBJ)
 
-prog4.o: prog4.cpp Lexer.cpp Lexer.h Token.cpp Token.h
-	g++ $(OPTS) prog4.cpp
+sil.o: silc.cpp Lexer.cpp Lexer.h Token.cpp Token.h parser.cpp parser.h
+	g++ $(OPTS) silc.cpp
 
 Lexer.o: Lexer.cpp Lexer.h
 	g++ $(OPTS) Lexer.cpp
 
 Token.o: Token.cpp Token.h
 	g++ $(OPTS) Token.cpp
+
+Parser.o: parser.cpp parser.h
+	g++ $(OPTS) parser.cpp
 
 clean:
 	rm -f *.o lextest *~

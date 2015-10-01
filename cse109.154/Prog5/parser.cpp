@@ -5,7 +5,7 @@ const string Parser::ops[] = {"ADD", "SUB", "AND", "DIV", "REM", "ISEQ", "ISGE",
 			      "ISLT", "ISNE", "MULT", "OR", "LOADL", "LOADV", "STOREV", "JUMPF",
 			      "JUMP", "INSLABEL", "PRINT", "SEQ", "NULLX", "PRINTLN", "PRINTS"};
 
-Parser::Parser(Lex& lexerx, ostream& outx): lexer(lexerx), out(outx), lindex(1), tindex(1) {
+Parser::Parser(Lexer& lexerx, ostream& outx): lexer(lexerx), out(outx), lindex(1), tindex(1) {
   token = lexer.nextToken();
 }
 
@@ -50,16 +50,15 @@ void Parser::generateCode(TreeNode* node) {
 
 Parser::TreeNode* Parser::optimize(TreeNode* node) {
     return NULL;
-  }
 }
 
 void Parser::error(string message) {
-  cerr << message << " Found " << token.lexeme() << " at line " << token.line() << " position " << token.pos() << endl;
+  cerr << message << " Found " << token.getLexeme() << " at line " << token.getLine() << " position " << token.getPos() << endl;
   exit(1);
 }
 
 void Parser::check(int tokenType, string message) {
-  if (token.type() != tokenType)
+  if (token.getType() != tokenType)
     error(message);
 }
 
@@ -70,7 +69,7 @@ Parser::TreeNode* Parser::factor() {
 Parser::TreeNode* Parser::term() {
   TreeNode* termNode = factor();
   TreeNode* factorNode;
-  int tokenType = token.type();
+  int tokenType = token.getType();
   while (tokenType == Token::TIMES || tokenType == Token::DIVIDE || tokenType == Token::REM) {
     token = lexer.nextToken();
     factorNode = factor();
@@ -85,7 +84,7 @@ Parser::TreeNode* Parser::term() {
         termNode = new TreeNode(REM, termNode, factorNode);
         break;
     }
-    tokenType = token.type();
+    tokenType = token.getType();
   }
   return termNode;
 }
@@ -132,7 +131,7 @@ Parser::TreeNode* Parser::switchStatement() {
 
 Parser::TreeNode* Parser::statement() {
   TreeNode* statement = NULL;
-  switch (token.type()) {
+  switch (token.getType()) {
     case Token::SET:
       statement = setStatement();
       break;

@@ -1,13 +1,15 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "token.h"
-#include "lex.h"
+#include "Token.h"
+#include "Lexer.h"
 #include <iostream>
 #include <string>
 #include <cstring>
 #include <stdlib.h>
 #include <sstream>
+
+class Token;
 
 using namespace std;
 
@@ -92,7 +94,7 @@ public:
   };
   
 private:
-  Lex lexer;
+  Lexer lexer;
   Token token;
   ostream& out;
   int lindex;
@@ -134,7 +136,7 @@ private:
   TreeNode* factor();
 
   
-  Parser(Lex& lexer, ostream& out);
+  Parser(Lexer& lexer, ostream& out);
   ~Parser(); 
 
   void generateCode(TreeNode* node);  

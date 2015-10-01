@@ -1,5 +1,5 @@
-#include "token.h"
-#include "lex.h"
+#include "Token.h"
+#include "Lexer.h"
 #include "parser.h"
 #include <iostream>
 #include <fstream>
@@ -9,7 +9,7 @@ using namespace std;
 bool genCode = true;
 
 void processFile(istream& in) {
-  Lex lexer(in);
+  Lexer lexer(in);
   Token token;
   Parser parser(lexer, cout);
   Parser::TreeNode* program = parser.program();
