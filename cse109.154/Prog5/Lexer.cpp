@@ -156,8 +156,6 @@ Token Lexer::nextToken()
       return Token(Token::INTLIT, lex, tokline, tokpos);
      else if(isFloatlit(lex))
       return Token(Token::FLOATLIT, lex, tokline, tokpos);
-     else if(isStrlit(lex))
-      return Token(Token::STRLIT, lex, tokline, tokpos);
      else if(isIdent(lex))
       return Token(Token::IDENT, lex, tokline, tokpos);
      else
@@ -233,6 +231,17 @@ Token Lexer::nextToken()
     default:
      return Token(Token::ERROR, "error", tokline, tokpos);
    }
+  }
+  else if(next == '\"')
+  {
+   next = nextChar();
+   while(next != '\"')
+   {
+    lex += next;
+    next = nextChar();
+   }
+   next = nextChar();
+   return Token(Token::STRLIT, lex, tokline, tokpos);
   }
   //else we just have a char and append it to lex then go to the next char
   else

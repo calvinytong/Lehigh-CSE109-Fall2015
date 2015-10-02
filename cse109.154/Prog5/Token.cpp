@@ -54,7 +54,7 @@ Token::Token(int t, string lex, int l, int p):tokentype(t), lexeme(lex), linenum
 /*
  * default constructor for testing sets all to null
  */
-Token::Token(): tokentype(NULL), lexeme(NULL), linenum(NULL), charpos(NULL)
+Token::Token(): tokentype(NULL), lexeme(""), linenum(NULL), charpos(NULL)
 {
 
 }

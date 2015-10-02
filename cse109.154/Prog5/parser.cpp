@@ -1,5 +1,6 @@
 #include "parser.h"
 #include <cstring>
+#include <string>
 
 const string Parser::ops[] = {"ADD", "SUB", "AND", "DIV", "REM", "ISEQ", "ISGE", "ISGT", "ISLE",
 			      "ISLT", "ISNE", "MULT", "OR", "LOADL", "LOADV", "STOREV", "JUMPF",
@@ -63,7 +64,25 @@ void Parser::check(int tokenType, string message) {
 }
 
 Parser::TreeNode* Parser::factor() {
-  return NULL;
+  TreeNode* factornode;
+  int tokentype = token.getType();
+  switch(tokentype)
+  {
+   case Token::INTLIT:
+    factornode = new TreeNode(LOADL, token.getLexeme());
+    break;
+   case Token::FLOATLIT:
+    factornode = new TreeNode(LOADL, token.getLexeme());
+    break;
+   case Token::IDENT:
+    factornode = new TreeNode(LOADV, token.getLexeme());
+    break;
+   case Token::LPAREN:
+    factornode = expression(); 
+    break;
+  }
+  token = lexer.nextToken();
+  return factornode;
 }
 
 Parser::TreeNode* Parser::term() {
@@ -90,7 +109,26 @@ Parser::TreeNode* Parser::term() {
 }
 
 Parser::TreeNode* Parser::expression() {
-  return NULL;
+  TreeNode* expNode = term();
+  TreeNode* termNode;
+  int tokenType = token.getType();
+  while(tokenType == Token::PLUS || tokenType == Token::MINUS)
+  {
+   token = lexer.nextToken();
+   termNode = term();
+   switch(tokenType)
+   {
+    case Token::PLUS:
+     expNode = new TreeNode(ADD, expNode, termNode);
+     break;
+    case Token::MINUS:
+     expNode = new TreeNode(SUB, expNode, termNode);
+     break;
+   }
+   tokenType = token.getType();
+  }
+  
+  return expNode;
 }
 
 Parser::TreeNode* Parser::relationalExpression() {
@@ -102,15 +140,59 @@ Parser::TreeNode* Parser::logicalExpression() {
 }
 
 Parser::TreeNode* Parser::setStatement() {
-  return NULL;
+  TreeNode* setnode;
+  TreeNode* expnode;
+  TreeNode* seqnode;
+  string message = "invalid set syntax";
+  check(Token::SET, message);
+  token = lexer.nextToken();
+  check(Token::IDENT, message);
+  setnode = new TreeNode(STOREV, token.getLexeme());
+  token = lexer.nextToken();
+  check(Token::ASSIGN, message);
+  token = lexer.nextToken();
+  expnode = expression();
+  seqnode = new TreeNode(SEQ, expnode, setnode);
+  return seqnode;
 }
 
 Parser::TreeNode* Parser::parsePrintExpression() {
-  return NULL;
+  TreeNode* stringnode;
+  TreeNode* printnode;
+  int tokenType = token.getType();
+  switch(tokenType)
+  {
+   case Token::STRLIT:
+    stringnode = new TreeNode(PRINTS, token.getLexeme());
+    token = lexer.nextToken();
+    return stringnode;
+   case Token::IDENT:
+    stringnode = new TreeNode(LOADV, token.getLexeme());
+    token = lexer.nextToken();
+    break;
+   default:
+    stringnode = expression();
+  }
+  printnode = new TreeNode(PRINT, NULL, stringnode);
+  return printnode;
 }
 
 Parser::TreeNode* Parser::printStatement() {
-  return NULL;
+  TreeNode* printstatenode;
+  TreeNode* printnode;
+  string message = "invalid print syntax";
+  check(Token::PRINT, message);
+  token = lexer.nextToken();
+  printstatenode = parsePrintExpression();
+  int tokenType = token.getType();
+  while(tokenType == Token::COMMA)
+  {
+   token = lexer.nextToken();
+   printnode = parsePrintExpression();
+   printstatenode = new TreeNode(SEQ, printstatenode, printnode);
+   tokenType = token.getType();
+  }
+  return printstatenode;
 }
 
 Parser::TreeNode* Parser::whileStatement() {
@@ -146,9 +228,25 @@ Parser::TreeNode* Parser::statement() {
 }
 
 Parser::TreeNode* Parser::compoundStatement() {
-  return NULL;
+  TreeNode* compnode = statement();
+  TreeNode* statementnode;
+  while(token.getLexeme() != "end")
+  {
+   statementnode = statement();
+   compnode = new TreeNode(SEQ, compnode, statementnode);
+  }
+  token = lexer.nextToken();
+  check(Token::PROGRAM, "invalide ending");
+  return compnode;
 }
 
 Parser::TreeNode* Parser::program() {
-  return NULL;
+  TreeNode* compoundnode;
+  string message = "invalid program declaration";
+  check(Token::PROGRAM, message);
+  token = lexer.nextToken();
+  check(Token::IDENT, message);
+  token = lexer.nextToken();
+  compoundnode = compoundStatement();
+  return compoundnode;
 }
