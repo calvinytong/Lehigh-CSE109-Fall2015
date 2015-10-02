@@ -1,3 +1,13 @@
+/*
+ * CSE 109
+ * Calvin Tong
+ * cyt219
+ * Program Description: parses the output of the lexer and builds a tree 
+ * I have only implemented some of the methods in this program,
+ * the methods I have written have a comment on the top of them
+ * Program #5
+ */
+
 #include "parser.h"
 #include <cstring>
 #include <string>
@@ -63,9 +73,15 @@ void Parser::check(int tokenType, string message) {
     error(message);
 }
 
+/*
+ * parses a factor
+ * @return the node containing the factor tree
+ */
 Parser::TreeNode* Parser::factor() {
   TreeNode* factornode;
   int tokentype = token.getType();
+  
+  //check token type
   switch(tokentype)
   {
    case Token::INTLIT:
@@ -85,6 +101,7 @@ Parser::TreeNode* Parser::factor() {
   return factornode;
 }
 
+//not written by me
 Parser::TreeNode* Parser::term() {
   TreeNode* termNode = factor();
   TreeNode* factorNode;
@@ -108,10 +125,17 @@ Parser::TreeNode* Parser::term() {
   return termNode;
 }
 
+/*
+ * parses an expression
+ * @return a pointer to the node containing the expression tree
+ */
 Parser::TreeNode* Parser::expression() {
+  //get initial term
   TreeNode* expNode = term();
   TreeNode* termNode;
   int tokenType = token.getType();
+  
+  //if there are more terms iterate through
   while(tokenType == Token::PLUS || tokenType == Token::MINUS)
   {
    token = lexer.nextToken();
@@ -139,37 +163,56 @@ Parser::TreeNode* Parser::logicalExpression() {
   return NULL;
 }
 
+/*
+ * parses a set statment
+ * @return a pointer to the node containing the set statment tree
+ */
 Parser::TreeNode* Parser::setStatement() {
   TreeNode* setnode;
   TreeNode* expnode;
   TreeNode* seqnode;
+  
+  //check to make sure syntax is correct
   string message = "invalid set syntax";
   check(Token::SET, message);
   token = lexer.nextToken();
   check(Token::IDENT, message);
+  
+  //create the set node
   setnode = new TreeNode(STOREV, token.getLexeme());
   token = lexer.nextToken();
   check(Token::ASSIGN, message);
   token = lexer.nextToken();
+
+  //parse the expression
   expnode = expression();
   seqnode = new TreeNode(SEQ, expnode, setnode);
   return seqnode;
 }
 
+/*
+ * parses a print expression
+ * @return printnode the node containing the print expression tree
+ */
 Parser::TreeNode* Parser::parsePrintExpression() {
   TreeNode* stringnode;
   TreeNode* printnode;
+  
+  //check type of token
   int tokenType = token.getType();
   switch(tokenType)
   {
+   //if str lit then just return a node with the string and PRINTS 
    case Token::STRLIT:
     stringnode = new TreeNode(PRINTS, token.getLexeme());
     token = lexer.nextToken();
     return stringnode;
+   //if ident then load the variable
    case Token::IDENT:
     stringnode = new TreeNode(LOADV, token.getLexeme());
     token = lexer.nextToken();
     break;
+   //else it is an expression so call expression method
    default:
     stringnode = expression();
   }
@@ -177,13 +220,21 @@ Parser::TreeNode* Parser::parsePrintExpression() {
   return printnode;
 }
 
+/*
+ * parses a print statement
+ * @return the node containing the tree with instructions to execute a print
+ */
 Parser::TreeNode* Parser::printStatement() {
   TreeNode* printstatenode;
   TreeNode* printnode;
-  string message = "invalid print syntax";
-  check(Token::PRINT, message);
+  
+  //get the next Token
   token = lexer.nextToken();
+  
+  //get initial print statement
   printstatenode = parsePrintExpression();
+  
+  //loop until commas run out and build the tree out
   int tokenType = token.getType();
   while(tokenType == Token::COMMA)
   {
@@ -211,6 +262,7 @@ Parser::TreeNode* Parser::switchStatement() {
   return NULL;  
 }
 
+//statement was written by femister
 Parser::TreeNode* Parser::statement() {
   TreeNode* statement = NULL;
   switch (token.getType()) {
@@ -227,26 +279,43 @@ Parser::TreeNode* Parser::statement() {
   return statement;
 }
 
+/*
+ * parses a compound statement
+ * @return a pointer to the node containing the compound statement
+ */
 Parser::TreeNode* Parser::compoundStatement() {
+  //get initial statement
   TreeNode* compnode = statement();
   TreeNode* statementnode;
+  
+  //if more statements exist then iterate until the end of the program
   while(token.getLexeme() != "end")
   {
    statementnode = statement();
    compnode = new TreeNode(SEQ, compnode, statementnode);
   }
+  //check that the next word after end is program
   token = lexer.nextToken();
-  check(Token::PROGRAM, "invalide ending");
+  check(Token::PROGRAM, "invalid ending");
+
   return compnode;
 }
 
+/*
+ * entry point to the tree parses the start of the program
+ * @return a popinter to the node that is the root of the tree
+ */
 Parser::TreeNode* Parser::program() {
   TreeNode* compoundnode;
   string message = "invalid program declaration";
+  
+  //check to see if the program is initialized correct syntax
   check(Token::PROGRAM, message);
   token = lexer.nextToken();
   check(Token::IDENT, message);
   token = lexer.nextToken();
+
+  //build the tree by calling compound statement
   compoundnode = compoundStatement();
   return compoundnode;
 }

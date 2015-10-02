@@ -1,3 +1,13 @@
+/*
+ * CSE 109
+ * Calvin Tong
+ * cyt219
+ * Program Description: parses the output of the lexer and builds a tree 
+ * I have only implemented some of the methods in this program,
+ * the methods I have written have a comment on the top of them
+ * Program #5
+ */
+
 #ifndef PARSER_H
 #define PARSER_H
 

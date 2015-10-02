@@ -1,3 +1,11 @@
+/*
+ * CSE 109
+ * Calvin Tong
+ * cyt219
+ * Program Description: a simple lexer
+ * Program #5
+ */
+
 #include <cstdlib>
 #include <iostream>
 #include "Lexer.h"

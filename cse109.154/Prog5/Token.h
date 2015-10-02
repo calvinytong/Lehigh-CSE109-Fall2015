@@ -1,3 +1,11 @@
+/*
+ * CSE 109
+ * Calvin Tong
+ * cyt219
+ * Program Description: a simple lexer
+ * Program #5
+ */
+
 #ifndef TOKEN_H
 #define TOKEN_H
 
