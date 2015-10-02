@@ -94,7 +94,8 @@ Parser::TreeNode* Parser::factor() {
     factornode = new TreeNode(LOADV, token.getLexeme());
     break;
    case Token::LPAREN:
-    factornode = expression(); 
+    factornode = expression();
+    check(Token::RPAREN, "expression has no closing paren");
     break;
   }
   token = lexer.nextToken();
