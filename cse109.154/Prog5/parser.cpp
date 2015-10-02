@@ -228,7 +228,7 @@ Parser::TreeNode* Parser::parsePrintExpression() {
 Parser::TreeNode* Parser::printStatement() {
   TreeNode* printstatenode;
   TreeNode* printnode;
-  
+  TreeNode* println = new TreeNode(PRINTLN);
   //get the next Token
   token = lexer.nextToken();
   
@@ -244,6 +244,7 @@ Parser::TreeNode* Parser::printStatement() {
    printstatenode = new TreeNode(SEQ, printstatenode, printnode);
    tokenType = token.getType();
   }
+  printstatenode = new TreeNode(SEQ, printstatenode, println);
   return printstatenode;
 }
 
