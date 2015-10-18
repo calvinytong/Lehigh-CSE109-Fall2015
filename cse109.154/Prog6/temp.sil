@@ -1,0 +1,14 @@
+program temperature
+
+set x = 0
+if x != 0 or  x == 0 then
+ print "less than"
+ end
+else
+ print "greater than"
+ end
+endif
+
+print "hi"
+
+end program
