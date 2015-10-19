@@ -155,13 +155,24 @@ Parser::TreeNode* Parser::expression() {
   return expNode;
 }
 
+/*
+ * parses a relational expression
+ * pointer to the relational expressio
+ */
 Parser::TreeNode* Parser::relationalExpression() {
+ //parse initial expression
  TreeNode* expnode = expression();
  TreeNode* cmpnode;
  TreeNode* rootnode;
+ 
+ //get type and then advance to the next token
  int tokenType = token.getType();
  token = lexer.nextToken();
+ 
+ //parse comparison
  cmpnode = expression();
+ 
+ //build tree
  switch(tokenType)
  {
   case Token::EQ:
@@ -183,11 +194,20 @@ Parser::TreeNode* Parser::relationalExpression() {
  return rootnode;
 }
 
+/*
+ * parses a logical expresion
+ * @return a pointer to the node containing the logical expression
+ */
 Parser::TreeNode* Parser::logicalExpression() {
+  //parse initial relational expressio
   TreeNode* leftnode = relationalExpression();
   TreeNode* rightnode;
   TreeNode* rootnode;
+  
+  //check if there is an and or an or
   int tokenType = token.getType();
+  
+  //create initial tree if and or or
   if(tokenType == Token::AND)
   {
    token = lexer.nextToken();
@@ -200,10 +220,13 @@ Parser::TreeNode* Parser::logicalExpression() {
    rightnode = relationalExpression();
    rootnode = new TreeNode(OR, leftnode, rightnode);
   }
+  //if not and or or then just return the relational expression
   else
   {
    return leftnode;
   }
+
+  //iterate through the rest building the tree out
   tokenType = token.getType();
   while(tokenType == Token::AND || tokenType == Token::OR)
   {
@@ -307,36 +330,54 @@ Parser::TreeNode* Parser::printStatement() {
   return printstatenode;
 }
 
+/*
+ * parses a while statement
+ * @return pointer to the tree containing the while statement
+ */
 Parser::TreeNode* Parser::whileStatement() {
+  //make labels
   string lblone = makeLabel();
   string lbltwo = makeLabel();
   
+  //insert label one with colon
   TreeNode* opnode = new TreeNode(INSLABEL, lblone += ":");
+  //chop colon off of the end
   lblone.erase(lblone.size() - 1);
   TreeNode* seqnode = new TreeNode(SEQ, NULL, opnode);
   
+  //go to the next token
   token = lexer.nextToken();
   
+  //parse logical expression
   opnode = logicalExpression();
   seqnode = new TreeNode(SEQ, seqnode, opnode);
   
+  //check syntax
   check(Token::DO, "improper while syntax");
   
+  //conditional jump to the end of the while loop
   opnode = new TreeNode(JUMPF, lbltwo);
   seqnode = new TreeNode(SEQ, seqnode, opnode);
   
+  //go do the next token
   token = lexer.nextToken();
 
+  //parse the compound statement
   opnode = compoundStatement();
   seqnode = new TreeNode(SEQ, seqnode, opnode);
 
+  //jump to beginning of the loop
   opnode = new TreeNode(JUMP, lblone);
   seqnode = new TreeNode(SEQ, seqnode, opnode);
 
+  //insert label at the end of the statement
   opnode = new TreeNode(INSLABEL, lbltwo += ":");
   seqnode = new TreeNode(SEQ, seqnode, opnode);
   
+  //check syntax
   check(Token::END, "end of while not found");
+  
+  //return one token ahead
   token = lexer.nextToken();
   return seqnode;
 }
@@ -345,39 +386,59 @@ Parser::TreeNode* Parser::forStatement() {
   return NULL;
 }
 
+/*
+ * parses an if statement
+ * @return a pointer to the node containing the if statement
+ */
 Parser::TreeNode* Parser::ifStatement() {
+  //makes labels
   string lblone = makeLabel();
   string lbltwo = makeLabel();
+  
+  //no need to check if its an if because statement already does that
   token = lexer.nextToken();
   
+  //parse logical expression
   TreeNode* opnode = logicalExpression();
   TreeNode* seqnode = new TreeNode(SEQ, NULL, opnode);
 
+  //check syntax
   check(Token::THEN, "invalid if syntax");
   token = lexer.nextToken();
   
+  //conditional jump to else label
   opnode = new TreeNode(JUMPF, lblone); 
   seqnode = new TreeNode(SEQ, seqnode, opnode);
 
+  //parse first compound statement
   opnode = compoundStatement();
   seqnode = new TreeNode(SEQ, seqnode, opnode);
 
+  //unconditional jump to label two
   opnode = new TreeNode(JUMP, lbltwo);
   seqnode = new TreeNode(SEQ, seqnode, opnode);
   
+  //add colon to label
   opnode = new TreeNode(INSLABEL, lblone += ":");
   seqnode = new TreeNode(SEQ, seqnode, opnode); 
 
   int tokenType = token.getType();
   
+  //parse else statement if it exists
   if(tokenType == Token::ELSE)
   {
    token = lexer.nextToken();
    opnode = compoundStatement();
    seqnode = new TreeNode(SEQ, seqnode, opnode);
   }
+
+  //check syntax
   check(Token::ENDIF, "invalid if syntax");
+  
+  //return one ahead
   token = lexer.nextToken();
+
+  //add final label
   opnode = new TreeNode(INSLABEL, lbltwo += ":");
   seqnode = new TreeNode(SEQ, seqnode, opnode);
   
@@ -420,8 +481,11 @@ Parser::TreeNode* Parser::compoundStatement() {
   TreeNode* compnode = statement();
   TreeNode* statementnode;
   int tokenType = token.getType();
+  
+  //make sure the keyword at the beginning of the statement is valid
   while(tokenType == Token::SET || tokenType == Token::WHILE || tokenType == Token::PRINT || tokenType == Token::IF)
   {
+  //parse the statement
    statementnode = statement();
    compnode = new TreeNode(SEQ, compnode, statementnode);
    tokenType = token.getType();
@@ -447,6 +511,8 @@ Parser::TreeNode* Parser::program() {
   //build the tree by calling compound statement
   compoundnode = compoundStatement();
   check(Token::END, message);
+  
+  //check corrct ending syntax
   token = lexer.nextToken();
   check(Token::PROGRAM, message);
   return compoundnode;

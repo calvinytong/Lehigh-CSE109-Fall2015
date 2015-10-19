@@ -2,5 +2,5 @@ program temperature
 
 set c = 100
 set f = 9.0/5.0 * c + 32
-print c, " degrees centigrade = ", f, " degrees farenheit "
+print c, " degrees centigrade = ", f, " degrees farenheit"
 end program
