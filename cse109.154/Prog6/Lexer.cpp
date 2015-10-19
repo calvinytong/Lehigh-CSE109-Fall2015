@@ -1,11 +1,3 @@
-/*
- * CSE 109
- * Calvin Tong
- * cyt219
- * Program Description: a simple lexer
- * Program #5
- */
-
 #include <cstdlib>
 #include <iostream>
 #include "Lexer.h"
@@ -17,7 +9,7 @@ using namespace std;
 class Token;
 
 //string containing special chars
-const string specialChars = "+-*/%=(),<>!$";
+const string specialChars = "+-*/%=(),<>!$\"";
 
 /*
  * constructor for lexer class sets next to null, linenum to 1, linepos to 1
@@ -236,20 +228,19 @@ Token Lexer::nextToken()
      return Token(Token::NE, "!=", tokline, tokpos);
     case '$':
      return Token(Token::ENDOFFILE, "$", tokline, tokpos);
+    case '\"':
+     lex += next;
+     next = nextChar();
+     while(next != '\"')
+     {
+      lex += next;
+      next = nextChar();
+     }
+     next = nextChar();
+     return Token(Token::STRLIT, lex, tokline, tokpos);
     default:
      return Token(Token::ERROR, "error", tokline, tokpos);
    }
-  }
-  else if(next == '\"')
-  {
-   next = nextChar();
-   while(next != '\"')
-   {
-    lex += next;
-    next = nextChar();
-   }
-   next = nextChar();
-   return Token(Token::STRLIT, lex, tokline, tokpos);
   }
   //else we just have a char and append it to lex then go to the next char
   else
