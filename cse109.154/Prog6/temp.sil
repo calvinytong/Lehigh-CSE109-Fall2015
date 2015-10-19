@@ -3,12 +3,14 @@ program temperature
 set x = 0
 if x != 0 or  x == 0 then
  print "less than"
- end
+ print x
 else
  print "greater than"
- end
 endif
 
+while x < 5 do
 print "hi"
+set x = x + 1
+end
 
 end program

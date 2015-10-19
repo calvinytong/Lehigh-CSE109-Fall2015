@@ -335,7 +335,9 @@ Parser::TreeNode* Parser::whileStatement() {
 
   opnode = new TreeNode(INSLABEL, lbltwo += ":");
   seqnode = new TreeNode(SEQ, seqnode, opnode);
-
+  
+  check(Token::END, "end of while not found");
+  token = lexer.nextToken();
   return seqnode;
 }
 
@@ -417,16 +419,13 @@ Parser::TreeNode* Parser::compoundStatement() {
   //get initial statement
   TreeNode* compnode = statement();
   TreeNode* statementnode;
-  
-  //if more statements exist then iterate until the end of the program
-  while(token.getLexeme() != "end")
+  int tokenType = token.getType();
+  while(tokenType == Token::SET || tokenType == Token::WHILE || tokenType == Token::PRINT || tokenType == Token::IF)
   {
    statementnode = statement();
    compnode = new TreeNode(SEQ, compnode, statementnode);
+   tokenType = token.getType();
   }
-  //check that the next word after end is program
-  token = lexer.nextToken();
-  //check(Token::PROGRAM, "invalid ending");
 
   return compnode;
 }
@@ -447,5 +446,8 @@ Parser::TreeNode* Parser::program() {
 
   //build the tree by calling compound statement
   compoundnode = compoundStatement();
+  check(Token::END, message);
+  token = lexer.nextToken();
+  check(Token::PROGRAM, message);
   return compoundnode;
 }
