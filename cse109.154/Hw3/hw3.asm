@@ -1,36 +1,31 @@
 SYS_EXIT equ 1
-SYS_READ equ 3
 SYS_WRITE equ 4
-STDIN equ 0
 STDOUT equ 1
 
-segment .bss
-char resb 1
-
 section .text
-	global main
+  global main
+
 main:
-  mov ecx, MSG           ; load initial pointer
+  mov ecx, MSG            ; load initial pointer
 
 itrstr:
-  cmp byte[ecx], 0       ; compare it to the 0 byte to see if we are done
-  jz done                ; jump to the end if we are at the end of the string
-  cmp byte[ecx], 0x20    ; check if we have a space
-  jz printlnlbl          ; jump to printlnlbl
-  call writeout          ; write the char out, skipped if its a space
-retprintln:
+  cmp byte[ecx], 0        ; compare it to the 0 byte to see if we are done
+  jz done                 ; jump to the end if we are at the end of the string
+  cmp byte[ecx], 0x20     ; check if we have a space
+  jz printlnlbl           ; jump to printlnlbl
+retprintln:  
+  call writeout           ; write the char out, skipped if its a space
   inc ecx                 ; increment the pointer stored in ecx
   jmp itrstr              ; jump back to the top of the loop
 
-printlnlbl:
-  push ecx                ; push the pointer value back in ecx
-  mov ecx, 0xA            ; move the new line character to ecx as the character to print
-  call writeout           ; jump back to the loop to write things out
-  pop ecx                 ; pop the value back
+printlnlbl: 
+  mov [ecx], byte 0xA     ; move the new line character to ecx as the character to print
   jmp retprintln          ; jump back to the loop after the other call to write out
 
 done:
-  mov eax,SYS_EXIT
+  mov ecx, NL            
+  call writeout           ; write out final new line
+  mov eax,SYS_EXIT        ; call sys exit
   int 0x80
 
 writeout:
@@ -41,4 +36,5 @@ writeout:
   ret
 
 segment .data
-  MSG db "this is a string with tokens", 0x0
+  MSG db "this is a string with tokens hi hi hi", 0x0 ; string to write out
+  NL db 0xA
