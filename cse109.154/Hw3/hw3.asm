@@ -10,7 +10,7 @@ char resb 1
 section .text
 	global main
 main:
-	mov ecx, str           ; load initial pointer
+  mov ecx, MSG           ; load initial pointer
 
 itrstr:
   cmp byte[ecx], 0       ; compare it to the 0 byte to see if we are done
@@ -31,7 +31,7 @@ printlnlbl:
 
 done:
   mov eax,SYS_EXIT
-	int 0x80
+  int 0x80
 
 writeout:
   mov eax, SYS_WRITE      ; syscall number for sys_write
@@ -41,4 +41,4 @@ writeout:
   ret
 
 segment .data
-	 str db ’this is a string with tokens’, 0x0
+  MSG db "this is a string with tokens", 0x0
