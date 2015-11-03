@@ -8,26 +8,26 @@
 
 #include <iostream>
 #include "Trie.h"
-
+#include <string>
 int main(int argc, char** argv)
 {
  //create a new trie
  Trie *t = new Trie();
- 
+ string s = "test test"; 
  //put a bunch of stuff
  cout << "testing put function" << endl;
  
  cout << "putting key lehigh to value 100" << endl;
- t->put("lehigh", 100);
+ t->put("lehigh", s);
 
  cout << "putting key hello to value 500" << endl;
- t->put("hello", 500);
+ t->put("hello", s);
 
  cout << "putting key lemon to value 6000" << endl;
- t->put("lemon", 6000);
+ t->put("lemon", s);
 
  cout << "putting key lemmings to value 200" << endl << endl;
- t->put("lemmings", 200);
+ t->put("lemmings", s);
  
  //retreive the stuff
  cout << "testing get function" << endl;

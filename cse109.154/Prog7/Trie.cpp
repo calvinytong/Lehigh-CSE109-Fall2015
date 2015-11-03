@@ -23,7 +23,7 @@ Trie::~Trie()
  * @param key the key with which the value will be retreived
  * @param value the int value to be stored in the trie 
  */
-void Trie::put(string key, int value)
+void Trie::put(string key, string value)
 {
  //pointer holding the current node in the itereation
  Node *current = startnode;
@@ -63,7 +63,7 @@ void Trie::put(string key, int value)
  * @param key the key to retreive
  * @return the value stored in the key -1 if the key is not keyed to a value
  */
-int Trie::get(string key)
+string Trie::get(string key)
 {
  //pointer holding the first node in the iteration
  Node *current = startnode;
@@ -77,7 +77,7 @@ int Trie::get(string key)
   //if the node does not exist then the key does not have a value pair
   if(next == NULL)
   {
-   return -1;
+   return "";
   }
   //set the current node to the next node and keep iterating
   current = next;

@@ -8,7 +8,7 @@
  * constructor that takes in an int value and sets it to value
  * @param v the value to be stored in the node
  */
-Node::Node(int v):value(v), numlinks(0)
+Node::Node(string s):value(s), numlinks(0)
 {
  links = new Link *[ARRAY_SIZE]; 
 }
@@ -16,8 +16,10 @@ Node::Node(int v):value(v), numlinks(0)
 /*
  * default constructor sets the value of the node to '\0' by default
  */
-Node::Node():value('\0'), numlinks(0)
+Node::Node():numlinks(0)
 {
+ string s = "";
+ this->value = s;
  links = new Link *[ARRAY_SIZE]; 
 }
 

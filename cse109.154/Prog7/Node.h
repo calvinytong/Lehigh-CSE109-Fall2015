@@ -2,7 +2,7 @@
 #define NODE_H
 
 #include "Link.h"
-
+#include <string>
 using namespace std;
 
 class Node
@@ -11,7 +11,7 @@ class Node
  //but this is not best practice
  public:
   //the int value of stored inside the node
-  int value;
+  string value;
   
   //the pointer to the dynamically allocated array of link pointers
   Link **links;
@@ -21,7 +21,7 @@ class Node
 
   //constructors
   Node();
-  Node(int v);
+  Node(string v);
   
   //public member functions
   Node *findChar(char c);

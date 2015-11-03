@@ -19,8 +19,8 @@ class Trie
   Node *startnode;
   
   //member functions
-  void put(string key, int value);
-  int get(string key);
+  void put(string key, string value);
+  string get(string key);
   Node *makeLink(char c, Node *current);
 
   //constructor
