@@ -13,7 +13,7 @@ public:
   HashTable(const HashTable &t);
   ~HashTable();
 
-  HashTable& add(const char *str, double d);
+  HashTable& add(const char *str, char *v);
 
   bool inTable(const char *)const;
 

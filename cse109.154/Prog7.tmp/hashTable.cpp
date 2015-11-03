@@ -23,11 +23,11 @@ HashTable::~HashTable(){
   delete [] table;
 }
 
-HashTable& HashTable::add(const char *str, double d = 0.0){
+HashTable& HashTable::add(const char *str, char *v){
   int h;
   check(!inTable(str),"(add()) Duplicate key");
   h = Hash(str).hash() % size;
-  table[h] = new Link(str, d, table[h]);
+  table[h] = new Link(str, v, table[h]);
   check(table[h] != NULL, "(add()) Heap overflow");
   return *this;
 }
@@ -42,7 +42,7 @@ bool HashTable::inTable(const char *k) const{
   return temp != NULL;
 }
 
-double& HashTable::operator [](const char *str){
+char* HashTable::operator [](const char *str){
   int h;
   Link *temp;
   if(!inTable(str)) // t["Lehigh"] = 5;
@@ -54,7 +54,7 @@ double& HashTable::operator [](const char *str){
   return temp->data;
 }
 
-const double HashTable::operator [](const char *str) const{
+const char* HashTable::operator [](const char *str) const{
   int h;
   Link *temp;  // double x = t["Lehigh"];
   check(inTable(str),"([]const) Missing key");
@@ -66,7 +66,8 @@ const double HashTable::operator [](const char *str) const{
 }
 
 HashTable& HashTable::operator +=(const char *k){
-  return add(k);
+ char *temp = "";
+ return add(k, temp);
 }
 
 void HashTable::remove(const char *str){

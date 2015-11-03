@@ -1,6 +1,6 @@
 #include "link.h"
 
-Link::Link(const char *k, double d, Link* nx):key(k),data(d),next(nx){}
+Link::Link(const char *k, char* s, Link* nx):key(k),data(s),next(nx){}
 
 Link::Link(const Link& t):key(t.key),data(t.data),next(t.next){}
 
