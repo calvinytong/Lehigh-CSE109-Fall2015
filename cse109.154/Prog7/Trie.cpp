@@ -25,33 +25,33 @@ Trie::~Trie()
 /*
  * puts a value into a tree for a given key
  * @param key the key with which the value will be retreived
- * @param value the int value to be stored in the trie 
+ * @param value the int value to be stored in the trie
  */
 void Trie::put(string key, string value)
 {
  //pointer holding the current node in the itereation
  Node *current = startnode;
- 
- //if the key is empty just return we cannot store those 
+
+ //if the key is empty just return we cannot store those
  if(key.length() == 0)
  {
   cout << "sorry you must enter a key" << endl;
   return;
  }
- 
- //iterate through the key 
+
+ //iterate through the key
  for(uint i = 0; i < key.length(); i++)
  {
    //use the findChar member function to find out whether the char is already in the trie
    Node *next = current->findChar(key[i]);
-   
+
    //branch exists already
    if(next != NULL)
    {
     //keep following the branch
     current = next;
    }
-   
+
    //branch does not exist, write out the rest of the word in a new branch
    else
    {
@@ -60,7 +60,7 @@ void Trie::put(string key, string value)
  }
  //after the key has been written out in the trie, store the value in the last node
  current->value = value;
- 
+
  keys[numkeys] = key;
  numkeys++;
 }
@@ -80,7 +80,7 @@ string Trie::get(string key)
  {
   //use the findChar member function to get the pointer to the next node in the word
   Node* next = current->findChar(key[i]);
-  
+
   //if the node does not exist then the key does not have a value pair
   if(next == NULL)
   {
@@ -100,7 +100,7 @@ string Trie::get(string key)
  * @return toadd a pointer to the new node that the member function created
  */
 Node *Trie::makeLink(char c, Node *current)
-{ 
+{
  //create new node object
  Node *toadd = new Node();
 
@@ -109,7 +109,7 @@ Node *Trie::makeLink(char c, Node *current)
 
  //use the numlinks member function to figure out where to put the link
  current->links[current->numlinks] = link;
- 
+
  //increment the number of links
  current->numlinks++;
 
@@ -117,6 +117,7 @@ Node *Trie::makeLink(char c, Node *current)
  return toadd;
 }
 
+//prints out the trie in plain text
 void Trie::printPlainText()
 {
  for(int a = 0; a < this->numkeys; a++)
@@ -130,7 +131,8 @@ void Trie::printPlainText()
  cout << endl;
 }
 
-string asciiToHex(string s)
+//changes ascii to hex string
+Trie::string asciiToHex(string s)
 {
  ostringstream result;
  if(s[0] == '0' && s.length() == 2)
@@ -142,15 +144,13 @@ string asciiToHex(string s)
  return result.str();
 }
 
-
+//overloaded << operator to print to file
 ostream& operator<<(ostream& out, Trie& t)
 {
  for(int i = 0; i < t.numkeys; i++)
  {
-  out << t.get(t.keys[i]) << asciiToHex(t.keys[i]) << "ff"; 
+  out << t.get(t.keys[i]) << asciiToHex(t.keys[i]) << "ff";
  }
  out << "aa";
  return out;
 }
-
-

@@ -12,7 +12,7 @@ class Node
  public:
   //the int value of stored inside the node
   string value;
-  
+
   //the pointer to the dynamically allocated array of link pointers
   Link **links;
 
@@ -22,10 +22,10 @@ class Node
   //constructors
   Node();
   Node(string v);
-  
+
   //public member functions
   Node *findChar(char c);
-  
+
   //destructor
   ~Node();
 };

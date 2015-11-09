@@ -46,7 +46,7 @@ class Token
 
   static const int ENDOFFILE;
   static const int ERROR;
-  
+
   //constructors
   Token(int t, string lex, int l, int p);
   Token();
