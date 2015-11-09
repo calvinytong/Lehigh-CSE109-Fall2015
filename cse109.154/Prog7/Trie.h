@@ -17,18 +17,25 @@ class Trie
   
   //the start node of the Trie
   Node *startnode;
-  
+ 
+  string keys[256];
+  int numkeys;
+
   //member functions
   void put(string key, string value);
   string get(string key);
   Node *makeLink(char c, Node *current);
-
+  void printPlainText();
   //constructor
   Trie(); 
   
   //destructor
   ~Trie();
-  
+
+  friend ostream& operator<<(ostream& in, Trie& t);
+
+  private:
+   string asciiToHex(string s);
 };
 
 #endif

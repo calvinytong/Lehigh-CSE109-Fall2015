@@ -1,11 +1,15 @@
 #include <cstdlib>
 #include <iostream>
 #include "Trie.h"
+#include <algorithm>
+#include <sstream>
+#include <iterator>
+#include <iomanip>
 
 /*
  * constructor method, create new trie by creating an empty node that acts as the startnode
  */
-Trie::Trie()
+Trie::Trie():numkeys(0)
 {
  startnode = new Node();
 }
@@ -56,6 +60,9 @@ void Trie::put(string key, string value)
  }
  //after the key has been written out in the trie, store the value in the last node
  current->value = value;
+ 
+ keys[numkeys] = key;
+ numkeys++;
 }
 
 /*
@@ -110,5 +117,40 @@ Node *Trie::makeLink(char c, Node *current)
  return toadd;
 }
 
+void Trie::printPlainText()
+{
+ for(int a = 0; a < this->numkeys; a++)
+ {
+  unsigned int x;
+  stringstream ss;
+  ss << hex << this->get(this->keys[a]);
+  ss >> x;
+  cout << static_cast<int>(x) << " " << this->keys[a] << endl;
+ }
+ cout << endl;
+}
+
+string asciiToHex(string s)
+{
+ ostringstream result;
+ if(s[0] == '0' && s.length() == 2)
+ {
+  s = s.substr(1);
+ }
+ result << setw(2) << setfill('0') << hex << nouppercase;
+ std::copy(s.begin(), s.end(), ostream_iterator<unsigned int>(result, ""));
+ return result.str();
+}
+
+
+ostream& operator<<(ostream& out, Trie& t)
+{
+ for(int i = 0; i < t.numkeys; i++)
+ {
+  out << t.get(t.keys[i]) << asciiToHex(t.keys[i]) << "ff"; 
+ }
+ out << "aa";
+ return out;
+}
 
 

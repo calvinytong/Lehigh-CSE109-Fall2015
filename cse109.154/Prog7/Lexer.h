@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
 
 class Token;
 
@@ -14,7 +15,7 @@ class Lexer
  public:
   //constructor
   Lexer(istream& i);
-  Lexer(ifstream& i);
+
   //destructor
   ~Lexer();
 
@@ -38,10 +39,7 @@ class Lexer
 
   //private member functions
   bool isSpecialChar(char ch);
-  bool isIntlit(string s);
-  bool isFloatlit(string s);
   bool isStrlit(string s);
-  bool isIdent(string s);
   char get(istream& i);
 };
 

@@ -16,10 +16,10 @@ Link.o: Link.cpp Link.h
 Trie.o: Trie.cpp Trie.h
 	g++ $(OPTS) Trie.cpp
 
-Lexer.o:
+Lexer.o: Lexer.cpp Lexer.h
 	g++ $(OPTS) Lexer.cpp
 
-Token.o:
+Token.o: Token.cpp Token.h
 	g++ $(OPTS) Token.cpp
 
 clean:
