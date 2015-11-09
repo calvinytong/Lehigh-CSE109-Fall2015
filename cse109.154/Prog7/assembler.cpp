@@ -164,6 +164,16 @@ int main(int argc, char** argv)
    pflag = true;
    continue;
   }
+  //opens the fin stream
+  fstream fin;
+  fin.open(argv[i], ios::in);
+  //check if its open return 1 if there is no file
+  if(!fin.is_open())
+  {
+   cout << "no file found" << endl;
+   return 1;
+  }
+
   //pseudo else condition b/c of continues
   //parse out the raw filename without extention
   string name = argv[i];
@@ -180,16 +190,6 @@ int main(int argc, char** argv)
   //open the fout stream
   ofstream fout;
   fout.open((rawname += ".s").c_str());
-
-  //opens the fin stream
-  fstream fin;
-  fin.open(argv[i], ios::in);
-  //check if its open return 1 if there is no file
-  if(!fin.is_open())
-  {
-   cout << "no file found" << endl;
-   return 1;
-  }
 
   //init lexer
   istream& i = fin;
@@ -325,7 +325,7 @@ int main(int argc, char** argv)
   //write the program table to fout
   for(int iii = 0; iii < opcount + 1; iii++)
   {
-   if(program[iii].length != 6)
+   if(program[iii].length() != 6)
    {
      cout << "reference to non existant label" << endl;
      return 1;
@@ -353,7 +353,6 @@ int main(int argc, char** argv)
    }
    cout << endl;
   }
-
  }
  return 0;
 }

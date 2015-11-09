@@ -132,7 +132,7 @@ void Trie::printPlainText()
 }
 
 //changes ascii to hex string
-Trie::string asciiToHex(string s)
+string asciiToHex(string s)
 {
  ostringstream result;
  if(s[0] == '0' && s.length() == 2)

@@ -33,9 +33,7 @@ class Trie
   ~Trie();
 
   friend ostream& operator<<(ostream& in, Trie& t);
-
-  private:
-   string asciiToHex(string s);
+  
 };
 
 #endif
