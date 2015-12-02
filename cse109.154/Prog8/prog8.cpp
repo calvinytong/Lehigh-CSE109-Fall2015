@@ -68,12 +68,20 @@ int main(int argc, char** argv)
       {
         if(graphs[e]->getLength() == wordlength)
 	{
-          graphs[e]->BFS(vstrings[1], vstrings[2]);
+	  prog8lib::Trie *t = graphs[e]->getTrie();
+          if(t->get(vstrings[1]) != -1 && t->get(vstrings[2]) != -1)
+	  {
+	    graphs[e]->BFS(vstrings[1], vstrings[2]);
+	  }
+	  else
+	  {
+            cout << "INVALID " << vstrings[1] << " " << vstrings[2] << endl; 
+	  }
 	}
       }
       wstream.clear();
       wstream.seekg(0, ios::beg);
-    }
+    } 
     else
     {
       continue;

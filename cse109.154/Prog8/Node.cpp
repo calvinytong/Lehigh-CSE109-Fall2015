@@ -5,7 +5,7 @@
 
 namespace prog8lib
 {
-  Node::Node(string s):value(s)
+  Node::Node(string s):value(s), distance(-1), parent(NULL)
   {
 
   }

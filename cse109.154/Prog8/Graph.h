@@ -20,7 +20,7 @@ namespace prog8lib
      Node** getWords();
      unsigned int getLength();
      void BFS(string root, string target);
-
+     Trie* getTrie();
      friend ostream& operator<<(ostream &os, Graph &g);
 
    private:

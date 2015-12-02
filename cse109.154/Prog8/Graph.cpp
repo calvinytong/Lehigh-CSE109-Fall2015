@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <list>
+#include <stack>
 namespace prog8lib
 {
   Graph::Graph(int n, vector<string> wvector, unsigned int len):size(n), wordlength(len)
@@ -30,6 +31,11 @@ namespace prog8lib
   unsigned int Graph::getLength()
   {
     return wordlength;
+  }
+  
+  Trie* Graph::getTrie()
+  {
+    return t;
   }
 
   void Graph::buildGraph(vector<string> wvector)
@@ -70,38 +76,52 @@ namespace prog8lib
   {
     int index = t->get(root);
     bool *visited = new bool[size];
-    Node *n;
+    Node *current;
+    list<Node*> queue;
+    Node *next; 
     for(int c = 0; c < size; c++)
     {
       visited[c] = false;
     }
-    list<Node*> queue;
+    words[index]->distance = 0;
     visited[index] = true;
     queue.push_back(words[index]);
 
     while(!queue.empty())
     {
-      n = queue.front(); 
-      cout << *n << " ";
-      if(n->value == target)
-      {
-        cout << endl;
-        break;
-      }
+      current = queue.front(); 
       queue.pop_front();
-
-      for(vector<Node*>::size_type d = 0; d != n->neighbors.size(); d++)
+      if(current->value == target)
       {
-        int id = t->get(n->neighbors[d]->value);
+        stack<string> s;
+	next = current;
+	int dist = next->distance;
+	for(int i = 0; i <= dist; i++)
+	{
+	  s.push(next->value);
+          next = next->parent;
+	}
+	for(int i = 0; i <= dist; i++)
+	{
+          cout << s.top() << " ";
+	  s.pop();
+	}
+	cout << endl;
+	return;
+      }
+      for(vector<Node*>::size_type d = 0; d != current->neighbors.size(); d++)
+      {
+        int id = t->get(current->neighbors[d]->value);
 	if(!visited[id])
 	{
           visited[id] = true;
-	  queue.push_back(n->neighbors[d]);
-	}
-	
+	  current->neighbors[d]->distance = current->distance + 1;
+	  current->neighbors[d]->parent = current;
+	  queue.push_back(current->neighbors[d]);
+	}	
       }
     }
-
+    cout << "INVALID " << root << " " << target << "asdf" << endl;
   }
 
   ostream& operator<<(ostream &os, Graph &g)

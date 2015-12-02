@@ -14,6 +14,8 @@ namespace prog8lib
    public:
      string value;
      vector<Node*> neighbors;
+     int distance;
+     Node *parent;
 
      Node();
      Node(string s);
