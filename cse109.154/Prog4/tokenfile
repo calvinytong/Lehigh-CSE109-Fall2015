@@ -1,2 +1,5 @@
-set x = 100
-while (x <= 20) do
+LOADL 6
+#this is a comment
+LOADV 7
+ADD
+

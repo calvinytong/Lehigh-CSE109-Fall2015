@@ -1,6 +1,5 @@
 LOADL 1
 STOREV xyz
-asdf
 loop1:
 LOADV xyz
 LOADL 5

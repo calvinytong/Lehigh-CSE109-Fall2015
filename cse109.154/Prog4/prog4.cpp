@@ -21,10 +21,8 @@ int main(int argc, char** argv)
  Lexer *l;
  if(argc == 2)
  {
-
   ifstream in;
-  in.open(argv[1]);
-
+  in.open(argv[1], ios::in);
   if(in)
    l = new Lexer(in);
   else

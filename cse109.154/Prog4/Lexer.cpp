@@ -72,7 +72,6 @@ char Lexer::nextChar()
    while(c != '\n' && c != EOF)
     c = get(this->getIn());
    linepos = 0;
-   linenum++;
    return c;
  }
  else
