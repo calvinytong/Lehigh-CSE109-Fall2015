@@ -121,7 +121,7 @@ namespace prog8lib
 	}	
       }
     }
-    cout << "INVALID " << root << " " << target << "asdf" << endl;
+    cout << "INVALID " << root << " " << target << endl;
   }
 
   ostream& operator<<(ostream &os, Graph &g)

@@ -6,6 +6,7 @@
 #include "Node.h"
 #include "Trie.h"
 #include <ostream>
+
 using namespace std;
 
 class Trie;
@@ -32,6 +33,5 @@ namespace prog8lib
 
      void buildGraph(vector<string> wvector);
   };
-
 }
 #endif
