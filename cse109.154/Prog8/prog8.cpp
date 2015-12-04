@@ -17,6 +17,35 @@
 
 using namespace std;
 
+namespace prog8lib
+{ 
+  /*
+   * checks if a word pair is valid 
+   * @param s1 the first string
+   * @param s2 the second string
+   * @param t the pointer to the dict hash
+   */
+  bool check(string s1, string s2, Trie *t)
+  {
+    //if either of the words are invalid or the lenght of the strings are not equal
+    if(t->get(s1) == -1 || t->get(s2) == -1 || s1.length() != s2.length())
+    {
+      return false;
+    }
+
+    //check that the letters in each word are all different
+    for(unsigned int i = 0; i < s1.length(); i++)
+    {
+      if(s1[i] == s2[i])
+      {
+        return false;
+      }
+    }
+
+    //if we pass all the tests return true
+    return true;
+  }
+}
 /*
  * Entry Point to the program
  * @param argc the number of argmuments
@@ -101,7 +130,7 @@ int main(int argc, char** argv)
 	{
 	  //check that the words are in the dict using the Trie
 	  prog8lib::Trie *t = graphs[e]->getTrie();
-          if(t->get(vstrings[1]) != -1 && t->get(vstrings[2]) != -1)
+          if(prog8lib::check(vstrings[1], vstrings[2], t))
 	  {
 	    //preform a BFS on the graph to find the shortest path (prints happen insdie
 	    //funciton
